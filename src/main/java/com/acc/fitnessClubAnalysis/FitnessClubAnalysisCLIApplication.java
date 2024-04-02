@@ -5,9 +5,7 @@
  */
 package com.acc.fitnessClubAnalysis;
 
-import com.acc.fitnessClubAnalysis.crawler.websites.Fit4LessWebCrawler;
 import com.acc.fitnessClubAnalysis.crawler.websites.GoodLifeWebCrawler;
-import com.acc.fitnessClubAnalysis.crawler.websites.PlanetFitnessWebCrawler;
 import com.acc.fitnessClubAnalysis.frequencyCount.WordCount;
 import com.acc.fitnessClubAnalysis.htmlParser.HtmlParser;
 import com.acc.fitnessClubAnalysis.htmlParser.helpers.HtmlParserHelper;
@@ -48,37 +46,41 @@ public class FitnessClubAnalysisCLIApplication extends InputValidation {
             System.out.println("0. Exit");
 
             // Read user choice
-            int choice = isChoiceValid(scanner.next());
+            int choice = isChoiceValid(scanner.nextLine());
 
             // Switch based on user choice
             switch (choice) {
-                case 1:
-                    performCrawling();
-                    break;
-
-                case 2:
-                    performParsing();
-                    break;
-
-                case 3:
-                    PageRanking.rank();
-                    break;
-
-                case 4:
-                    InvertedIndexing.indexAll();
-                    break;
-
-                case 5:
-                    countFrequency();
-                    break;
-
-                case 0:
+                case 1 -> performCrawling();
+                case 2, 3, 4, 5 -> handleOtherChoices(choice);
+                case 0 -> {
                     System.out.println("Exiting program. Goodbye!");
                     System.exit(0);
-
-                default:
-                    System.out.println("Invalid choice. Please select again.");
+                }
+                default -> System.out.println("Invalid choice. Please select again.");
             }
+        }
+    }
+
+    private static void handleOtherChoices(int choice) {
+        if (!htmlFilesAvailable()) return;
+        switch (choice) {
+            case 2:
+                performParsing();
+                break;
+
+            case 3:
+                PageRanking.rank();
+                break;
+
+            case 4:
+                InvertedIndexing.indexAll();
+                break;
+
+            case 5:
+                countFrequency();
+                break;
+            default:
+                System.out.println("Invalid choice. Please select again.");
         }
     }
 
@@ -115,13 +117,15 @@ public class FitnessClubAnalysisCLIApplication extends InputValidation {
         System.out.println();
     }
 
+    private static boolean htmlFilesAvailable() {
+        if (FileUtil.checkHtmlFiles()) return true;
+        System.out.println("No Files available.\nPlease perform Crawling first.\n");
+        return false;
+    }
+
     private static void performParsing() {
-        if (FileUtil.checkHtmlFiles()) {
-            List<Gym> gymList = HtmlParser.parseAll();
-            HtmlParserHelper.filterDeals(gymList);
-        } else {
-            System.out.println("No HTML files available for parsing.");
-        }
+        List<Gym> gymList = HtmlParser.parseAll();
+        HtmlParserHelper.filterDeals(gymList);
     }
 
     private static void performCrawling() {
@@ -129,11 +133,11 @@ public class FitnessClubAnalysisCLIApplication extends InputValidation {
         System.out.println("\nEnter 0 to go back");
         String cityName;
         do {
-            System.out.println("Enter any city name in Ontario:");
-            cityName = scanner.next();
+            System.out.print("Enter any city name in Ontario:");
+            cityName = scanner.nextLine();
             if (Objects.equals(cityName, "0")) return;
 
-        } while (!isCityNameValid(cityName));
+        } while (!isCityNameValid(cityName.toLowerCase()));
 
 
         int freq = cityInputCount.getOrDefault(cityName.toLowerCase(), 0);
@@ -145,8 +149,8 @@ public class FitnessClubAnalysisCLIApplication extends InputValidation {
 
     // Perform web crawling from both websites
     private static void scrapeAll(String name) {
-        PlanetFitnessWebCrawler.scrape(name);
-        Fit4LessWebCrawler.scrape(name);
+//        PlanetFitnessWebCrawler.scrape(name);
+//        Fit4LessWebCrawler.scrape(name);
         GoodLifeWebCrawler.scrape(name);
     }
 }

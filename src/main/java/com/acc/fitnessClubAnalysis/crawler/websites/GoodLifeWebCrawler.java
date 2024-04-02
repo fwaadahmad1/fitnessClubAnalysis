@@ -39,12 +39,12 @@ public class GoodLifeWebCrawler extends BaseWebCrawler implements IWebCrawler {
 
     public static void collectData(String input) {
         drvr.manage().window().maximize();
-        wait = new WebDriverWait(drvr, Duration.ofSeconds(90));
         WebElement searchInput = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("club-search")));
         searchInput.sendKeys(input);
         searchInput.sendKeys(Keys.ENTER);
+        WebElement loader = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("js-is-loading")));
 
-        wait.withTimeout(Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.invisibilityOf(loader));
 
         String content = drvr.findElement(By.tagName("html")).getAttribute("outerHTML");
 

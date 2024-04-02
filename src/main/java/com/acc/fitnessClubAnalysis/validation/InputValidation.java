@@ -44,7 +44,7 @@ public class InputValidation {
     }
 
     public static int isChoiceValid(String choice) {
-        return choice.matches("^[0-5]$") ? Integer.parseInt(choice) : -1;
+        return choice.trim().matches("^[0-5]$") ? Integer.parseInt(choice.trim()) : -1;
     }
 
     public static boolean isSpellingCorrect(String word) {
@@ -56,6 +56,7 @@ public class InputValidation {
         switch (cities.size()) {
             case 0:
                 System.out.println("City not in Ontario");
+                isSpellingCorrect(cityName);
                 return false;
             case 1:
                 if (cities.getFirst().equals(cityName)) return true;

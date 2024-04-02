@@ -31,8 +31,6 @@ public class Fit4lessParser implements IHtmlParser {
             } else {
                 System.out.println("The folder is empty.");
             }
-        } else {
-            System.out.println("The specified path is not a directory.");
         }
         return gymList;
     }
