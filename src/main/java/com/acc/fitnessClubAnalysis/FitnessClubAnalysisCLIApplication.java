@@ -20,9 +20,6 @@ import java.util.*;
 
 public class FitnessClubAnalysisCLIApplication extends InputValidation {
 
-    // TODO: Check with spaced input
-
-
     // Initialize global scanner
     static Scanner scanner = new Scanner(System.in);
 
@@ -105,7 +102,7 @@ public class FitnessClubAnalysisCLIApplication extends InputValidation {
         String word;
         do {
             System.out.println("Enter any word to search in files:");
-            word = scanner.next();
+            word = scanner.nextLine();
             if (Objects.equals(word, "0")) return;
 
         } while (!isSpellingCorrect(word));
@@ -133,7 +130,7 @@ public class FitnessClubAnalysisCLIApplication extends InputValidation {
         System.out.println("\nEnter 0 to go back");
         String cityName;
         do {
-            System.out.print("Enter any city name in Ontario:");
+            System.out.println("Enter any city name in Ontario:");
             cityName = scanner.nextLine();
             if (Objects.equals(cityName, "0")) return;
 
