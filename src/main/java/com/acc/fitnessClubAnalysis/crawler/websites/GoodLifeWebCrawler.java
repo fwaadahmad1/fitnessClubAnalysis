@@ -2,7 +2,6 @@ package com.acc.fitnessClubAnalysis.crawler.websites;
 
 import com.acc.fitnessClubAnalysis.constants.StringConstants;
 import com.acc.fitnessClubAnalysis.crawler.BaseWebCrawler;
-import com.acc.fitnessClubAnalysis.crawler.interfaces.IWebCrawler;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -15,7 +14,7 @@ import java.time.Duration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class GoodLifeWebCrawler extends BaseWebCrawler implements IWebCrawler {
+public class GoodLifeWebCrawler extends BaseWebCrawler {
     public static String url = "https://www.goodlifefitness.com/clubs.html#findaclub";
     static WebDriver drvr;
     static WebDriverWait wait;

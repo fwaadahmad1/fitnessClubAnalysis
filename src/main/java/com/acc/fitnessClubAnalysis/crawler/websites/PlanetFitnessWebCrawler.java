@@ -2,7 +2,6 @@ package com.acc.fitnessClubAnalysis.crawler.websites;
 
 import com.acc.fitnessClubAnalysis.constants.StringConstants;
 import com.acc.fitnessClubAnalysis.crawler.BaseWebCrawler;
-import com.acc.fitnessClubAnalysis.crawler.interfaces.IWebCrawler;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -14,7 +13,7 @@ import java.time.Duration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class PlanetFitnessWebCrawler extends BaseWebCrawler implements IWebCrawler {
+public class PlanetFitnessWebCrawler extends BaseWebCrawler {
 
     public static String url = "https://www.planetfitness.ca/gyms/";
     static WebDriver driver;

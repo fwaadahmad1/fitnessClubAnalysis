@@ -5,7 +5,9 @@
  */
 package com.acc.fitnessClubAnalysis;
 
+import com.acc.fitnessClubAnalysis.crawler.websites.Fit4LessWebCrawler;
 import com.acc.fitnessClubAnalysis.crawler.websites.GoodLifeWebCrawler;
+import com.acc.fitnessClubAnalysis.crawler.websites.PlanetFitnessWebCrawler;
 import com.acc.fitnessClubAnalysis.frequencyCount.WordCount;
 import com.acc.fitnessClubAnalysis.htmlParser.HtmlParser;
 import com.acc.fitnessClubAnalysis.htmlParser.helpers.HtmlParserHelper;
@@ -146,8 +148,8 @@ public class FitnessClubAnalysisCLIApplication extends InputValidation {
 
     // Perform web crawling from both websites
     private static void scrapeAll(String name) {
-//        PlanetFitnessWebCrawler.scrape(name);
-//        Fit4LessWebCrawler.scrape(name);
+        PlanetFitnessWebCrawler.scrape(name);
+        Fit4LessWebCrawler.scrape(name);
         GoodLifeWebCrawler.scrape(name);
     }
 }

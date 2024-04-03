@@ -74,14 +74,4 @@ public abstract class BaseWebCrawler {
         writeContent(folder, content, fileName, ".html");
         return mapOfURL;
     }
-
-    /**
-     * Waits for a specific element to be visible on the page
-     *
-     * @param locator The locator strategy to find the element
-     * @return The WebElement once it is visible
-     */
-    public static WebElement waitForElement(By locator) {
-        return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
-    }
 }
