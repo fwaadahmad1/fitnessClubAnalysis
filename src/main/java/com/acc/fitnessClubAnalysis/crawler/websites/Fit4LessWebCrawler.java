@@ -2,7 +2,6 @@ package com.acc.fitnessClubAnalysis.crawler.websites;
 
 import com.acc.fitnessClubAnalysis.constants.StringConstants;
 import com.acc.fitnessClubAnalysis.crawler.BaseWebCrawler;
-import com.acc.fitnessClubAnalysis.crawler.interfaces.IWebCrawler;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -14,7 +13,7 @@ import java.time.Duration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Fit4LessWebCrawler extends BaseWebCrawler implements IWebCrawler {
+public class Fit4LessWebCrawler extends BaseWebCrawler {
 
     // URL for web crawling
     public static String url = "https://www.fit4less.ca/locations";
@@ -51,14 +50,12 @@ public class Fit4LessWebCrawler extends BaseWebCrawler implements IWebCrawler {
         // Get web element
         drvr.findElement(By.id("province-dropdown")).click();
 
-        wait = new WebDriverWait(drvr, Duration.ofSeconds(30));
         WebElement _dropdown = drvr.findElement(By.cssSelector("#province-dropdown > ul > li[data-provname=\"Ontario\"]"));
         Actions actions = new Actions(drvr);
         actions.scrollToElement(_dropdown).perform();
         _dropdown.click();
 
         drvr.findElement(By.id("city-dropdown")).click();
-        wait = new WebDriverWait(drvr, Duration.ofSeconds(30));
 
         // Construct the CSS selector with the city name variable
         String cssSelector = String.format("#city-dropdown > ul > li[data-cityname=\"%s\"]", name);
