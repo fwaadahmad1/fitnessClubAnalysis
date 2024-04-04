@@ -1,7 +1,6 @@
 package com.acc.fitnessClubAnalysis.models;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Gym {
     String _name;
@@ -41,68 +40,68 @@ public class Gym {
         return _name;
     }
 
-    public String get_address() {
-        return _address;
-    }
-
-    public String get_phone() {
-        return _phone;
-    }
-
-    public String get_membershipName() {
-        return _membershipName;
-    }
-
-    public String get_provider() {
-        return _provider;
-    }
-
-    public String get_price() {
-        return _price;
-    }
-
-    public Double get_effectivePrice() {
-        return _effectivePrice;
-    }
-
-    public String get_url() {
-        return _url;
-    }
-
-    public List<String> get_amenities() {
-        return _amenities;
-    }
-
     public void set_name(String _name) {
         this._name = _name;
     }
 
-    public void set_url(String _url) {
-        this._url = _url;
+    public String get_address() {
+        return _address;
     }
 
     public void set_address(String _address) {
         this._address = _address;
     }
 
+    public String get_phone() {
+        return _phone;
+    }
+
     public void set_phone(String _phone) {
         this._phone = _phone;
+    }
+
+    public String get_membershipName() {
+        return _membershipName;
     }
 
     public void set_membershipName(String _membershipName) {
         this._membershipName = _membershipName;
     }
 
+    public String get_provider() {
+        return _provider;
+    }
+
     public void set_provider(String _provider) {
         this._provider = _provider;
+    }
+
+    public String get_price() {
+        return _price;
     }
 
     public void set_price(String _price) {
         this._price = _price;
     }
 
+    public Double get_effectivePrice() {
+        return _effectivePrice;
+    }
+
     public void set_effectivePrice(Double _effectivePrice) {
         this._effectivePrice = _effectivePrice;
+    }
+
+    public String get_url() {
+        return _url;
+    }
+
+    public void set_url(String _url) {
+        this._url = _url;
+    }
+
+    public List<String> get_amenities() {
+        return _amenities;
     }
 
     public void set_amenities(List<String> _amenities) {

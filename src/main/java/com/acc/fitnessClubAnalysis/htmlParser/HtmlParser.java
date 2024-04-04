@@ -9,7 +9,6 @@ import com.acc.fitnessClubAnalysis.constants.StringConstants;
 import com.acc.fitnessClubAnalysis.crawler.websites.Fit4LessWebCrawler;
 import com.acc.fitnessClubAnalysis.crawler.websites.GoodLifeWebCrawler;
 import com.acc.fitnessClubAnalysis.crawler.websites.PlanetFitnessWebCrawler;
-import com.acc.fitnessClubAnalysis.htmlParser.interfaces.IHtmlParser;
 import com.acc.fitnessClubAnalysis.htmlParser.websites.Fit4lessParser;
 import com.acc.fitnessClubAnalysis.htmlParser.websites.GoodLifeParser;
 import com.acc.fitnessClubAnalysis.htmlParser.websites.PlanetFitnessParser;
@@ -17,7 +16,6 @@ import com.acc.fitnessClubAnalysis.models.Gym;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 public class HtmlParser {

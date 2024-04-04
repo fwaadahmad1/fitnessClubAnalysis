@@ -6,8 +6,8 @@
 package com.acc.fitnessClubAnalysis.models;
 
 public class Rank {
-    private String name;
-    private int ranking;
+    private final String name;
+    private final int ranking;
 
     public Rank(String name, int ranking) {
         this.name = name;

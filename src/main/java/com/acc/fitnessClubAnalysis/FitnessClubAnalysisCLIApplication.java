@@ -24,11 +24,9 @@ import java.util.*;
 
 public class FitnessClubAnalysisCLIApplication extends InputValidation {
 
+    private static final HashMap<String, Integer> cityInputCount = new HashMap<>();
     // Initialize global scanner
     static Scanner scanner = new Scanner(System.in);
-
-    private static final HashMap<String, Integer> cityInputCount = new HashMap<>();
-
     private static List<Gym> gymList = new ArrayList<>();
 
     /**

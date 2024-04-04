@@ -115,9 +115,4 @@ public class Fit4lessParser implements IHtmlParser {
         return Info_List;
     }
 
-    public static void main(String[] args) {
-        Fit4lessParser fit4lessParser = new Fit4lessParser();
-        fit4lessParser.parseFiles();
-    }
-
 }

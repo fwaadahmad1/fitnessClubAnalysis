@@ -14,6 +14,7 @@ import java.util.*;
 public class InvertedIndexing {
 
     private static InvertedIndexing invertedIndexing;
+    private final Map<String, Set<Integer>> indexMap = new HashMap<>();
 
     public static InvertedIndexing getInstance() {
         if (invertedIndexing == null) {
@@ -21,8 +22,6 @@ public class InvertedIndexing {
         }
         return invertedIndexing;
     }
-
-    private final Map<String, Set<Integer>> indexMap = new HashMap<>();
 
     public Map<String, Set<Integer>> getIndexMap() {
         return indexMap;

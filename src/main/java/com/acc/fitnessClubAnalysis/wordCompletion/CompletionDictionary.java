@@ -10,17 +10,6 @@ import java.util.*;
 public class CompletionDictionary {
 
     private static CompletionDictionary completionDictionaryInstance = null;
-
-    static class TNode {
-        Map<Character, TNode> _c;
-        boolean _is_end;
-
-        TNode() {
-            this._c = new HashMap<>();
-            this._is_end = false;
-        }
-    }
-
     private final TNode root;
 
     CompletionDictionary() {
@@ -83,6 +72,16 @@ public class CompletionDictionary {
             _p.append(ch);
             findCompletions(_n._c.get(ch), _p, _cs);
             _p.deleteCharAt(_p.length() - 1);
+        }
+    }
+
+    static class TNode {
+        Map<Character, TNode> _c;
+        boolean _is_end;
+
+        TNode() {
+            this._c = new HashMap<>();
+            this._is_end = false;
         }
     }
 }

@@ -15,19 +15,6 @@ import java.util.PriorityQueue;
 public class SpellCheckDict {
 
     private static SpellCheckDict _d = null;
-
-    static class WordNode {
-        String _k;
-        int _v;
-        WordNode _l, _r;
-
-        WordNode(String _k) {    // here each node contains a key(ky) and an integer value //
-            this._k = _k;
-            this._v = 1;
-            _l = _r = null;
-        }
-    }
-
     private WordNode _r;
 
     private SpellCheckDict() {
@@ -175,7 +162,6 @@ public class SpellCheckDict {
         } else return true;
     }
 
-
     private int _ldt(String _w1, String _w2) {
 
         int m = _w1.length();
@@ -206,6 +192,18 @@ public class SpellCheckDict {
 
     public void putAll(List<String> words) {
         words.forEach(word -> _i(word.toLowerCase()));
+    }
+
+    static class WordNode {
+        String _k;
+        int _v;
+        WordNode _l, _r;
+
+        WordNode(String _k) {    // here each node contains a key(ky) and an integer value //
+            this._k = _k;
+            this._v = 1;
+            _l = _r = null;
+        }
     }
 }
 
