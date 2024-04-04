@@ -35,9 +35,11 @@ public class PageRanking {
 
     private static void displayPageRanking(PriorityQueue<Rank> pageRanking) {
         System.out.println("Web Ranking based on number of gyms at location:");
+        int i = 1;
         while (!pageRanking.isEmpty()) {
             Rank page = pageRanking.poll();
-            System.out.println(page.getName() + ": " + page.getRanking());
+            System.out.println(i + ". " + page.getName());
+            i++;
         }
     }
 }
