@@ -10,6 +10,8 @@ import org.jsoup.select.Elements;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.acc.fitnessClubAnalysis.constants.StringConstants.FIT4LESS_OUTPUT_FOLDER_PATH;
 
@@ -64,8 +66,18 @@ public class Fit4lessParser implements IHtmlParser {
                     address = addressElement.text();
                 }
 
-                Gym g1 = new Gym(gymName, address, "black card", provider, "13.99 per 2 weeks", 13.99 / 2);
-                Gym g2 = new Gym(gymName, address, "4less card", provider, "7.99 per 2 weeks", 7.99 / 2);
+                Element phoneElement = gymDiv.selectFirst("div.gym-details-info__phone");
+                String phone = null;
+                if (phoneElement != null) {
+                    Pattern pattern = Pattern.compile("\\(\\d{3}\\) \\d{3}-\\d{4}");
+                    Matcher matcher = pattern.matcher(phoneElement.text());
+                    while (matcher.find()) {
+                        phone = matcher.group();
+                    }
+                }
+
+                Gym g1 = new Gym(gymName, address, phone, "black card", provider, "13.99 per 2 weeks", 13.99 / 2);
+                Gym g2 = new Gym(gymName, address, phone, "4less card", provider, "7.99 per 2 weeks", 7.99 / 2);
 
                 Info_List.add(g1);
                 Info_List.add(g2);

@@ -11,7 +11,6 @@ import com.acc.fitnessClubAnalysis.models.Rank;
 import java.util.Comparator;
 import java.util.List;
 import java.util.PriorityQueue;
-import java.util.Scanner;
 
 public class WordDictionary {
 
@@ -267,64 +266,6 @@ public class WordDictionary {
 
     public void putAll(List<String> words) {
         words.forEach(word -> inst(word.toLowerCase()));
-    }
-
-
-    public static void main(String[] args) {                            // main method //
-        Scanner hrry_sc = new Scanner(System.in);
-        WordDictionary d = new WordDictionary();
-
-        while (true) {
-            System.out.println("\nSpell Checker Menu:");
-            System.out.println("1. Spell Check");
-            System.out.println("2. Add word");
-            System.out.println("3. Remove word");
-            System.out.println("4. List words");
-            System.out.println("5. Auto-correct");
-            System.out.println("6. Exit");
-            System.out.print("Enter your choice: ");
-
-            int c = hrry_sc.nextInt();
-            hrry_sc.nextLine();
-
-            switch (c) {
-                case 1:
-                    System.out.print("Enter a word to spell check: ");
-                    String wdToCheck = hrry_sc.nextLine().toLowerCase();
-                    System.out.println(d.spl_chk(wdToCheck));
-                    break;
-                case 2:
-                    System.out.print("Enter a word to add to dictionary: ");
-                    String wdToAdd = hrry_sc.nextLine().toLowerCase();
-                    d.inst(wdToAdd);
-                    System.out.println("word added to dictionary.");
-                    break;
-                case 3:
-                    System.out.print("Enter a word to remove from dictionary: ");
-                    String wdToRemove = hrry_sc.nextLine().toLowerCase();
-                    if (d.srch(wdToRemove)) {
-                        d.dlt(wdToRemove);
-                        System.out.println("word removed from dictionary.");
-                    } else {
-                        System.out.println("word not found in dictionary.");
-                    }
-                    break;
-                case 4:
-                    System.out.println("List of words in dictionary:");
-                    d.traversal_inodr();
-                    break;
-                case 5:
-                    System.out.println("Enter word for auto-correct: ");
-                    String w = hrry_sc.next();
-                    d.autoCorrectMethod(w);
-                    break;
-                case 6:
-                    System.out.println("Exiting...");
-                    System.exit(0);
-                default:
-                    System.out.println("Invalid choice. Please try again.");
-            }
-        }
     }
 }
 

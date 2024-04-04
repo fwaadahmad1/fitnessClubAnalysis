@@ -7,15 +7,10 @@ package com.acc.fitnessClubAnalysis.pageRanking;
 
 import com.acc.fitnessClubAnalysis.models.Gym;
 import com.acc.fitnessClubAnalysis.models.Rank;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Comparator;
+import java.util.List;
+import java.util.PriorityQueue;
 
 public class PageRanking {
 
@@ -23,29 +18,7 @@ public class PageRanking {
         displayPageRanking(calculatePageRanking(gymList));
     }
 
-    public static String extractMetaContent(Document doc) {
-        StringBuilder metaContent = new StringBuilder();
-        Elements metaTags = doc.select("meta");
-
-        for (Element metaTag : metaTags) {
-            metaContent.append(metaTag.attr("content")).append(" ");
-        }
-
-        return metaContent.toString();
-    }
-
-    public static String extractText(Document doc) {
-        StringBuilder textContent = new StringBuilder();
-        Elements elements = doc.select("p, h1, h2, h3, h4, h5, h6, li, div, span, title");
-
-        for (Element element : elements) {
-            textContent.append(element.text()).append(" ");
-        }
-
-        return textContent.toString();
-    }
-
-    public static PriorityQueue<Rank> calculatePageRanking(List<Gym> gymList) {
+    private static PriorityQueue<Rank> calculatePageRanking(List<Gym> gymList) {
         PriorityQueue<Rank> pageRank = new PriorityQueue<>(Comparator.comparingInt(Rank::getRanking).reversed());
         pageRank.offer(new Rank("Fit4Less",
                                 (int) gymList.stream().filter(o -> o.getProvider().equals("fit4less")).count()));
@@ -60,11 +33,13 @@ public class PageRanking {
         return pageRank;
     }
 
-    public static void displayPageRanking(PriorityQueue<Rank> pageRanking) {
+    private static void displayPageRanking(PriorityQueue<Rank> pageRanking) {
         System.out.println("Web Ranking based on number of gyms at location:");
+        int i = 1;
         while (!pageRanking.isEmpty()) {
             Rank page = pageRanking.poll();
-            System.out.println(page.getName() + ": " + page.getRanking());
+            System.out.println(i + ". " + page.getName());
+            i++;
         }
     }
 }
