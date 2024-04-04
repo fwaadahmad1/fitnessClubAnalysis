@@ -124,13 +124,13 @@ public class FitnessClubAnalysisCLIApplication extends InputValidation {
                                 break sortingLoop;
                             }
                             case 1 -> {
-                                listToPrint.sort(Comparator.comparingDouble(Gym::getEffectivePrice));
+                                listToPrint.sort(Comparator.comparingDouble(Gym::get_effectivePrice));
                                 if (showRank) PageRanking.rank(listToPrint);
                                 HtmlParserHelper.displayList(listToPrint);
                                 break sortingLoop;
                             }
                             case 2 -> {
-                                listToPrint.sort(Comparator.comparingDouble(Gym::getEffectivePrice).reversed());
+                                listToPrint.sort(Comparator.comparingDouble(Gym::get_effectivePrice).reversed());
                                 if (showRank) PageRanking.rank(listToPrint);
                                 HtmlParserHelper.displayList(listToPrint);
                                 break sortingLoop;

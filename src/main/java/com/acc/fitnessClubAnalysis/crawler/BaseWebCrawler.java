@@ -9,9 +9,6 @@ import java.util.Hashtable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * WebCrawler class for finding hyperlinks and writing content to files.
- */
 public abstract class BaseWebCrawler {
 
     protected static ChromeOptions options = new ChromeOptions();
@@ -22,53 +19,33 @@ public abstract class BaseWebCrawler {
         Logger.getLogger("org.openqa.selenium").setLevel(Level.OFF);
     }
 
-    /**
-     * Writes content to a file in the specified folder.
-     *
-     * @param folderName    Name of the folder
-     * @param content       Content to be written
-     * @param fileName      Name of the file
-     * @param fileExtension File extension (e.g., ".html")
-     */
     public static void writeContent(String folderName, String content, String fileName, String fileExtension) {
         try {
-            File check_Folder = new File(folderName);
-            File ff = new File(folderName + fileName + fileExtension);
-            if (!check_Folder.exists()) {
+            File fr = new File(folderName);
+            File frf = new File(folderName + fileName + fileExtension);
+            if (!fr.exists()) {
 
-                boolean created = check_Folder.mkdirs();
+                boolean created = fr.mkdirs();
                 if (created) {
 
-                    FileWriter fiWriter = new FileWriter(ff, false);
-                    fiWriter.write(content);
-                    fiWriter.close();
+                    FileWriter _flwr = new FileWriter(frf, false);
+                    _flwr.write(content);
+                    _flwr.close();
                 } else {
-                    System.out.println("Failed to create the folder.");
+                    System.out.println("Folder creation failed.");
                 }
             } else {
 
-                FileWriter ffWriter = new FileWriter(ff, false);
-                ffWriter.write(content);
-                ffWriter.close();
+                FileWriter _flwr = new FileWriter(frf, false);
+                _flwr.write(content);
+                _flwr.close();
             }
         } catch (Exception e) {
-            System.out.println("Error occurring in file");
+            System.out.println("File Creation error!");
         }
     }
 
-    /**
-     * Creates a file, writes content to it, and returns a Hashtable containing file information.
-     *
-     * @param url      URL associated with the file
-     * @param content  Content to be written
-     * @param fileName Name of the file
-     * @param folder   Folder in which the file is created
-     * @return Hashtable containing file information
-     */
-    public static Hashtable<String, String> createFile(String url, String content, String fileName, String folder) {
-        Hashtable<String, String> mapOfURL = new Hashtable<>();
-        mapOfURL.put(fileName + ".html", url);
+    public static void createFile(String content, String fileName, String folder) {
         writeContent(folder, content, fileName, ".html");
-        return mapOfURL;
     }
 }

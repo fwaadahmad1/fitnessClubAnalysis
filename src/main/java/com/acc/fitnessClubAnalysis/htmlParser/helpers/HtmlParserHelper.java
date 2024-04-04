@@ -42,11 +42,11 @@ public class HtmlParserHelper {
         for (Gym museum : museum_List) {
             // Display museum information
             System.out.printf("|%-40s | %-60s | %-15s| %-30s| %-25s|%n",
-                              museum.getName(),
-                              museum.getAddress(),
-                              museum.getMembershipName(),
-                              museum.getProvider(),
-                              museum.getPrice());
+                              museum.get_name(),
+                              museum.get_address(),
+                              museum.get_membershipName(),
+                              museum.get_provider(),
+                              museum.get_price());
         }
 
         // Display footer for museum data

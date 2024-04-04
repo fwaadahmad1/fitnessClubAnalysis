@@ -15,8 +15,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class GoodLifeWebCrawler extends BaseWebCrawler {
-    public static String url = "https://www.goodlifefitness.com/clubs.html#findaclub";
-    static WebDriver drvr;
+    public static String _u = "https://www.goodlifefitness.com/clubs.html#findaclub";
+    static WebDriver _d;
     static WebDriverWait wait;
 
     public static void scrape(String name) {
@@ -25,19 +25,18 @@ public class GoodLifeWebCrawler extends BaseWebCrawler {
         closeDriver();
     }
 
-    // initialize the driver
     public static void initDriver() {
         Logger.getLogger("org.openqa.selenium.devtools.CdpVersionFinder").setLevel(Level.OFF);
 
-        drvr = new ChromeDriver(options);
+        _d = new ChromeDriver(options);
 
-        wait = new WebDriverWait(drvr, Duration.ofSeconds(30));
-        drvr.get(url);
-        drvr.navigate().refresh();
+        wait = new WebDriverWait(_d, Duration.ofSeconds(30));
+        _d.get(_u);
+        _d.navigate().refresh();
     }
 
     public static void collectData(String input) {
-        drvr.manage().window().maximize();
+        _d.manage().window().maximize();
         WebElement searchInput = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("club-search")));
         searchInput.sendKeys(input);
         searchInput.sendKeys(Keys.ENTER);
@@ -45,22 +44,13 @@ public class GoodLifeWebCrawler extends BaseWebCrawler {
 
         wait.until(ExpectedConditions.invisibilityOf(loader));
 
-        String content = drvr.findElement(By.tagName("html")).getAttribute("outerHTML");
+        String content = _d.findElement(By.tagName("html")).getAttribute("outerHTML");
 
-        createFile(url,
-                   content,
-                   StringConstants.GOOD_LIFE_OUTPUT_FILE_NAME,
-                   StringConstants.GOOD_LIFE_OUTPUT_FOLDER_PATH);
-        System.out.println("goodLife data extracted and saved in Json...");
+        createFile(content, StringConstants.GOOD_LIFE_OUTPUT_FILE_NAME, StringConstants.GOOD_LIFE_OUTPUT_FOLDER_PATH);
+        System.out.println("goodLife data crawled and saved in Json...");
     }
 
-    // reset driver
-    public static void reset_Driver() {
-        drvr.get(url);
-    }
-
-    // close driver
     public static void closeDriver() {
-        drvr.quit();
+        _d.quit();
     }
 }

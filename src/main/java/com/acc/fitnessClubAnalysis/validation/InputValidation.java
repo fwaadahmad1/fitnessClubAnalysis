@@ -6,16 +6,16 @@
 package com.acc.fitnessClubAnalysis.validation;
 
 import com.acc.fitnessClubAnalysis.constants.Cities;
-import com.acc.fitnessClubAnalysis.dictionary.WordDictionary;
-import com.acc.fitnessClubAnalysis.wordCompletion.WordCompletion;
+import com.acc.fitnessClubAnalysis.dictionary.SpellCheckDict;
+import com.acc.fitnessClubAnalysis.wordCompletion.CompletionDictionary;
 
 import java.util.List;
 
 import static com.acc.fitnessClubAnalysis.utils.StringUtil.capitalize;
 
 public class InputValidation {
-    private static final WordDictionary dictionary = WordDictionary.getInstance();
-    private static final WordCompletion wordCompletion = WordCompletion.getInstance();
+    private static final SpellCheckDict dictionary = SpellCheckDict.getInstance();
+    private static final CompletionDictionary COMPLETION_DICTIONARY = CompletionDictionary.getInstance();
 
     public InputValidation() {
         init();
@@ -26,7 +26,7 @@ public class InputValidation {
     }
 
     private static void initDictionary() {
-        wordCompletion.insertAll(Cities.ONTARIO_CITIES_LIST);
+        COMPLETION_DICTIONARY.insertAll(Cities.ONTARIO_CITIES_LIST);
         dictionary.putAll(Cities.ONTARIO_CITIES_LIST);
     }
 
@@ -39,11 +39,11 @@ public class InputValidation {
     }
 
     public static boolean isSpellingCorrect(String word) {
-        return dictionary.autoCorrectMethod(word.toLowerCase());
+        return dictionary._acm(word.toLowerCase());
     }
 
     public static boolean isCityNameValid(String cityName) {
-        List<String> cities = wordCompletion.wordCompletion(cityName);
+        List<String> cities = COMPLETION_DICTIONARY.wordCompletion(cityName);
         switch (cities.size()) {
             case 0:
                 System.out.println("City not in Ontario");

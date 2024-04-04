@@ -21,14 +21,14 @@ public class PageRanking {
     private static PriorityQueue<Rank> calculatePageRanking(List<Gym> gymList) {
         PriorityQueue<Rank> pageRank = new PriorityQueue<>(Comparator.comparingInt(Rank::getRanking).reversed());
         pageRank.offer(new Rank("Fit4Less",
-                                (int) gymList.stream().filter(o -> o.getProvider().equals("fit4less")).count()));
+                                (int) gymList.stream().filter(o -> o.get_provider().equals("fit4less")).count()));
         pageRank.offer(new Rank("GoodLife",
                                 (int) gymList.stream()
-                                             .filter(o -> o.getProvider().equals("GoodLife fitness gym"))
+                                             .filter(o -> o.get_provider().equals("GoodLife fitness gym"))
                                              .count()));
         pageRank.offer(new Rank("Planet Fitness",
                                 (int) gymList.stream()
-                                             .filter(o -> o.getProvider().equals("planetfitness gym"))
+                                             .filter(o -> o.get_provider().equals("planetfitness gym"))
                                              .count()));
         return pageRank;
     }

@@ -14,42 +14,36 @@ public class FileUtil {
         File GoodlifeFolder = new File(StringConstants.GOOD_LIFE_OUTPUT_FOLDER_PATH);
 
         if (GoodlifeFolder.exists() && GoodlifeFolder.isDirectory()) {
-            File[] files = GoodlifeFolder.listFiles();
+            File[] _fls = GoodlifeFolder.listFiles();
 
-            // If files array is not null
-            if (files != null) {
-                // Loop through each file in the array
-                for (File file : files) {
-                    // Check if file is a regular file and ends with ".html" extension
-                    if (file.isFile() && file.getName().endsWith(".html")) {
-                        return true; // Have one file
+            if (_fls != null) {
+                for (File _f : _fls) {
+                    if (_f.isFile() && _f.getName().endsWith(".html")) {
+                        return true;
                     }
                 }
             }
         }
 
-        return false; // Files not found
+        return false;
     }
 
     public static boolean checkHtmlFilesForFit4Less() {
         File GFolder = new File(StringConstants.FIT4LESS_OUTPUT_FOLDER_PATH);
 
         if (GFolder.exists() && GFolder.isDirectory()) {
-            File[] files = GFolder.listFiles();
+            File[] _fs = GFolder.listFiles();
 
-            // If files array is not null
-            if (files != null) {
-                // Loop through each file in the array
-                for (File file : files) {
-                    // Check if file is a regular file and ends with ".html" extension
-                    if (file.isFile() && file.getName().endsWith(".html")) {
-                        return true; // Have one file
+            if (_fs != null) {
+                for (File _f : _fs) {
+                    if (_f.isFile() && _f.getName().endsWith(".html")) {
+                        return true;
                     }
                 }
             }
         }
 
-        return false; // Files not found
+        return false;
     }
 
     // Check if HTML files exist in British folder
@@ -57,25 +51,21 @@ public class FileUtil {
         File planetFolder = new File(StringConstants.PLANET_FITNESS_OUTPUT_FOLDER_PATH);
 
         if (planetFolder.exists() && planetFolder.isDirectory()) {
-            File[] files = planetFolder.listFiles();
+            File[] _fs = planetFolder.listFiles();
 
-            // If files array is not null
-            if (files != null) {
-                // Loop through each file in the array
-                for (File file : files) {
-                    // Check if file is a regular file and ends with ".html" extension
-                    if (file.isFile() && file.getName().endsWith(".html")) {
-                        return true; // Have one file
+            if (_fs != null) {
+                for (File _f : _fs) {
+                    if (_f.isFile() && _f.getName().endsWith(".html")) {
+                        return true;
                     }
                 }
             }
         }
 
-        return false; // No files exist
+        return false;
     }
 
-    // Check if HTML files present in any of the specified folders
-    public static boolean checkHtmlFiles() {
+    static public boolean checkHtmlFiles() {
         return checkHtmlFilesForGoodLife() || checkHtmlFilesForPlanetFitness() || checkHtmlFilesForFit4Less();
     }
 }

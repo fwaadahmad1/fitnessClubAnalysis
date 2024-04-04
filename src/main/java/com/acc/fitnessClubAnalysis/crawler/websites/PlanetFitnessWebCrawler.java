@@ -15,8 +15,8 @@ import java.util.logging.Logger;
 
 public class PlanetFitnessWebCrawler extends BaseWebCrawler {
 
-    public static String url = "https://www.planetfitness.ca/gyms/";
-    static WebDriver driver;
+    public static String _u = "https://www.planetfitness.ca/gyms/";
+    static WebDriver _d;
     static WebDriverWait wait;
 
     public static void scrape(String name) {
@@ -25,23 +25,21 @@ public class PlanetFitnessWebCrawler extends BaseWebCrawler {
         closeDriver();
     }
 
-    // initialize the driver
     public static void initDriver() {
         Logger.getLogger("org.openqa.selenium.devtools.CdpVersionFinder").setLevel(Level.OFF);
 
-        driver = new ChromeDriver(options);
-        wait = new WebDriverWait(driver, Duration.ofSeconds(30));
-        driver.get(url);
-        driver.navigate().refresh();
+        _d = new ChromeDriver(options);
+        wait = new WebDriverWait(_d, Duration.ofSeconds(30));
+        _d.get(_u);
+        _d.navigate().refresh();
     }
 
     public static void collectData(String input) {
-        driver.manage().window().maximize();
-        WebElement searchInput = driver.findElement(By.id("search"));
+        _d.manage().window().maximize();
+        WebElement si = _d.findElement(By.id("search"));
 
-        // Type text into the input field
-        searchInput.sendKeys(input);
-        searchInput.sendKeys(Keys.ENTER);
+        si.sendKeys(input);
+        si.sendKeys(Keys.ENTER);
 
         try {
             Thread.sleep(3);
@@ -49,23 +47,17 @@ public class PlanetFitnessWebCrawler extends BaseWebCrawler {
             throw new RuntimeException(e);
         }
 
-        driver.get("https://www.planetfitness.ca/gyms/?q=" + input);
-        String content = driver.getPageSource();
-        BaseWebCrawler.createFile(url,
-                                  content,
+        _d.get("https://www.planetfitness.ca/gyms/?q=" + input);
+        String content = _d.getPageSource();
+        BaseWebCrawler.createFile(content,
                                   StringConstants.PLANET_FITNESS_OUTPUT_FILE_NAME,
                                   StringConstants.PLANET_FITNESS_OUTPUT_FOLDER_PATH);
 
-        System.out.println("planetFitness data extracted and saved in Json...");
-    }
-
-    // reset driver
-    public static void reset_Driver() {
-        driver.get(url);
+        System.out.println("planetFitness data crawled and saved in Json...");
     }
 
     // close driver
     public static void closeDriver() {
-        driver.quit();
+        _d.quit();
     }
 }

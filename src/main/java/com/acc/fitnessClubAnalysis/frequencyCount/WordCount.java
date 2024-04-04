@@ -11,26 +11,26 @@ import java.util.StringTokenizer;
 
 public class WordCount {
 
-    // Using algorithm to find word frequency using hashMap.
-    private static Map<String, Integer> getWordFrequency(String s) {
-        Map<String, Integer> word_Count = new HashMap<>();
-        StringTokenizer token = new StringTokenizer(s, " \t\n\r\f,.!?");
-        while (token.hasMoreTokens()) {
-
-            String word = token.nextToken().toLowerCase().replaceAll("[^a-zA-Z]", "");
-            Integer i = word_Count.getOrDefault(word, 0);
-            if (word.length() >= 2) {
-                word_Count.put(word, i + 1);
-            } else if (i == null) {
-                word_Count.put(word, 1);
-            }
+    private static Map<String, Integer> getWrdFrq(String _s) {
+        Map<String, Integer> wc_map = new HashMap<>();
+        StringTokenizer _t = new StringTokenizer(_s, " \t\n\r\f,.!?");
+        if (_t.hasMoreTokens()) {
+            do {
+                String _w = _t.nextToken().toLowerCase().replaceAll("[^a-zA-Z]", "");
+                Integer x = wc_map.getOrDefault(_w, 0);
+                if (_w.length() >= 2) {
+                    wc_map.put(_w, x + 1);
+                } else if (x == null) {
+                    wc_map.put(_w, 1);
+                }
+            } while (_t.hasMoreTokens());
         }
-        return word_Count;
+        return wc_map;
 
     }
 
     public static Map<String, Integer> countInText(String text) {
-        return getWordFrequency(text);
+        return getWrdFrq(text);
     }
 }
 
