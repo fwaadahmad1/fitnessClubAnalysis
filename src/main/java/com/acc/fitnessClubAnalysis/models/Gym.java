@@ -3,6 +3,7 @@ package com.acc.fitnessClubAnalysis.models;
 public class Gym {
     String name;
     String address;
+    String phone;
     String membershipName;
     String provider;
     String price;
@@ -10,17 +11,20 @@ public class Gym {
 
     public Gym(String name,
                String address,
+               String phone,
                String membershipName,
                String provider,
                String price,
                Double effectivePrice) {
         this.name = name;
         this.address = address;
+        this.phone = phone;
         this.membershipName = membershipName;
         this.provider = provider;
         this.price = price;
         this.effectivePrice = effectivePrice;
     }
+
 
     public String getName() {
         return name;
@@ -28,6 +32,10 @@ public class Gym {
 
     public String getAddress() {
         return address;
+    }
+
+    public String getPhone() {
+        return phone;
     }
 
     public String getMembershipName() {

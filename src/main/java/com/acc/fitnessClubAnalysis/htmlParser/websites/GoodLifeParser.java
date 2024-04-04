@@ -11,6 +11,8 @@ import org.jsoup.select.Elements;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.acc.fitnessClubAnalysis.constants.StringConstants.GOOD_LIFE_OUTPUT_FOLDER_PATH;
 
@@ -62,16 +64,21 @@ public class GoodLifeParser implements IHtmlParser {
                 }
 
                 String address = "";
+                String phone = "";
                 try {
-                    address = clubDiv.select("p.c-card__contact").text().split("\\(")[0].trim();
+                    Elements addressElement = clubDiv.select("p.c-card__contact");
+                    address = addressElement.text().split("\\(")[0].trim();
+                    Pattern pattern = Pattern.compile("\\(\\d{3}\\) \\d{3}-\\d{4}");
+                    Matcher matcher = pattern.matcher(addressElement.text());
+                    while (matcher.find()) {
+                        phone = matcher.group();
+                    }
                 } catch (Exception ignored) {
                 }
 
-                //   System.out.println(address);
-
-                Gym g1 = new Gym(clubName, address, "Premium", provider, "35.99 per 2 weeks", 35.99 / 2);
-                Gym g2 = new Gym(clubName, address, "Ultimate", provider, "39.99 per 2 weeks", 39.99 / 2);
-                Gym g3 = new Gym(clubName, address, "Performance", provider, "54.99 per 2 weeks", 54.99 / 2);
+                Gym g1 = new Gym(clubName, address, phone, "Premium", provider, "35.99 per 2 weeks", 35.99 / 2);
+                Gym g2 = new Gym(clubName, address, phone, "Ultimate", provider, "39.99 per 2 weeks", 39.99 / 2);
+                Gym g3 = new Gym(clubName, address, phone, "Performance", provider, "54.99 per 2 weeks", 54.99 / 2);
                 Info_List.add(g1);
                 Info_List.add(g2);
                 Info_List.add(g3);
