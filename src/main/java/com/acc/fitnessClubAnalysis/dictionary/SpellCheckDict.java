@@ -61,8 +61,7 @@ public class SpellCheckDict {
             if (_r._l._k.compareToIgnoreCase(_k) > 0) {
                 _r._l._l = _sply(_r._l._l, _k);
                 _r = rr(_r);
-            }
-            else if (_r._l._k.compareToIgnoreCase(_k) < 0) {
+            } else if (_r._l._k.compareToIgnoreCase(_k) < 0) {
                 _r._l._r = _sply(_r._l._r, _k);
                 if (_r._l._r != null) _r._l = rl(_r._l);
             }
@@ -73,8 +72,7 @@ public class SpellCheckDict {
             if (_r._r._k.compareToIgnoreCase(_k) < 0) {
                 _r._r._r = _sply(_r._r._r, _k);
                 _r = rl(_r);
-            }
-            else if (_r._r._k.compareToIgnoreCase(_k) > 0) {
+            } else if (_r._r._k.compareToIgnoreCase(_k) > 0) {
                 _r._r._l = _sply(_r._r._l, _k);
                 if (_r._r._l != null) _r._r = rr(_r._r);
             }
@@ -127,7 +125,6 @@ public class SpellCheckDict {
 
     public String chk_sl(String _w) {
         if (!_s(_w)) {
-            System.out.println("Word not found. Did you mean: ");
             _sw(this._r, _w, 3);
         }
         return "";
@@ -138,6 +135,7 @@ public class SpellCheckDict {
         PriorityQueue<Rank> wordRanking = new PriorityQueue<>(Comparator.comparingInt(Rank::getRanking));
         __sw(root, wd, threshold, wordRanking);
 
+        if (!wordRanking.isEmpty()) System.out.println("Word not found. Did you mean: ");
         int WORD_LIMIT = 5;
         int i = 0;
         while (!wordRanking.isEmpty() && i < WORD_LIMIT) {

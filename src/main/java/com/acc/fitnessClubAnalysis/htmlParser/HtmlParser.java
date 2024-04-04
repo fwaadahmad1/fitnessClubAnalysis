@@ -6,6 +6,9 @@
 package com.acc.fitnessClubAnalysis.htmlParser;
 
 import com.acc.fitnessClubAnalysis.constants.StringConstants;
+import com.acc.fitnessClubAnalysis.crawler.websites.Fit4LessWebCrawler;
+import com.acc.fitnessClubAnalysis.crawler.websites.GoodLifeWebCrawler;
+import com.acc.fitnessClubAnalysis.crawler.websites.PlanetFitnessWebCrawler;
 import com.acc.fitnessClubAnalysis.htmlParser.interfaces.IHtmlParser;
 import com.acc.fitnessClubAnalysis.htmlParser.websites.Fit4lessParser;
 import com.acc.fitnessClubAnalysis.htmlParser.websites.GoodLifeParser;
@@ -25,10 +28,16 @@ public class HtmlParser {
     }
 
     private static List<Gym> getGymList() {
-        List<Gym> gymList = new ArrayList<>();
-//        List<IHtmlParser> parsers = List.of(new GoodLifeParser());
-        List<IHtmlParser> parsers = List.of(new Fit4lessParser(), new GoodLifeParser(), new PlanetFitnessParser());
-        parsers.forEach(iHtmlParser -> gymList.addAll(iHtmlParser.parseFiles()));
+        List<Gym> gymList;
+
+        List<Gym> rawList = (new Fit4lessParser()).parseFiles();
+        gymList = Fit4LessWebCrawler.crawlAmenities(rawList);
+
+        rawList = (new GoodLifeParser()).parseFiles();
+        gymList.addAll(GoodLifeWebCrawler.crawlAmenities(rawList));
+
+        rawList = (new PlanetFitnessParser()).parseFiles();
+        gymList.addAll(PlanetFitnessWebCrawler.crawlAmenities(rawList));
 
         return gymList;
     }

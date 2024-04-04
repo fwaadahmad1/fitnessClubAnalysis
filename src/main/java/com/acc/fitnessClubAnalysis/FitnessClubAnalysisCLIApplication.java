@@ -5,6 +5,7 @@
  */
 package com.acc.fitnessClubAnalysis;
 
+import com.acc.fitnessClubAnalysis.constants.StringConstants;
 import com.acc.fitnessClubAnalysis.crawler.websites.Fit4LessWebCrawler;
 import com.acc.fitnessClubAnalysis.crawler.websites.GoodLifeWebCrawler;
 import com.acc.fitnessClubAnalysis.crawler.websites.PlanetFitnessWebCrawler;
@@ -16,7 +17,9 @@ import com.acc.fitnessClubAnalysis.models.Rank;
 import com.acc.fitnessClubAnalysis.pageRanking.PageRanking;
 import com.acc.fitnessClubAnalysis.utils.FileUtil;
 import com.acc.fitnessClubAnalysis.validation.InputValidation;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.File;
 import java.util.*;
 
 public class FitnessClubAnalysisCLIApplication extends InputValidation {
@@ -34,74 +37,7 @@ public class FitnessClubAnalysisCLIApplication extends InputValidation {
 
     public static void main(String[] args) {
         init();
-
-        outerLoop:
-        while (true) {
-            // Display menu options
-            System.out.println("Select an option:");
-            System.out.println("1. Perform Crawling");
-            System.out.println("2. Perform Parsing");
-            System.out.println("0. Exit");
-
-            // Read user choice
-            int choice = isChoiceValid(scanner.nextLine());
-
-            // Switch based on user choice
-            switch (choice) {
-                case 1 -> performCrawling();
-                case 2 -> {
-                    if (htmlFilesAvailable()) {
-                        performParsing();
-                        innerLoop:
-                        while (true) {
-                            System.out.println("Select an option:");
-                            System.out.println("1. Show All");
-                            System.out.println("2. Filter by brand");
-                            System.out.println("0. Go Back");
-                            int innerChoice = isChoiceValid(scanner.nextLine());
-                            switch (innerChoice) {
-                                case 1 -> printList(gymList, true);
-                                case 2 -> {
-                                    String brand;
-                                    while (true) {
-                                        System.out.println("0: Go Back");
-                                        System.out.println("Chose a brand:");
-                                        System.out.println("1. Fit4Less");
-                                        System.out.println("2. GoodLifeFitness");
-                                        System.out.println("3. PlanetFitness");
-                                        int brandChoice = isChoiceValid(scanner.nextLine());
-                                        if (brandChoice == 0) break innerLoop;
-                                        brand = switch (brandChoice) {
-                                            case 1 -> "fitless";
-                                            case 2 -> "goodlife";
-                                            case 3 -> "planetfitness";
-                                            default -> "";
-                                        };
-                                        if (!brand.isBlank()) break;
-                                        System.out.println("Invalid choice!");
-                                    }
-                                    Set<Integer> filteredIndex = InvertedIndexing.getInstance()
-                                                                                 .getIndexMap()
-                                                                                 .getOrDefault(brand, new HashSet<>());
-                                    List<Gym> filteredGymList = new ArrayList<>();
-                                    filteredIndex.forEach(idx -> filteredGymList.add(gymList.get(idx)));
-                                    printList(filteredGymList, false);
-                                }
-                                case 0 -> {
-                                    break innerLoop;
-                                }
-                                default -> System.out.println("Invalid choice. Please select again.");
-                            }
-                        }
-                    }
-                }
-                case 0 -> {
-                    System.out.println("Exiting program. Goodbye!");
-                    System.exit(0);
-                }
-                default -> System.out.println("Invalid choice. Please select again.");
-            }
-        }
+        performCrawling();
     }
 
     private static void printList(List<Gym> listToPrint, boolean showRank) {
@@ -175,22 +111,149 @@ public class FitnessClubAnalysisCLIApplication extends InputValidation {
     }
 
     private static void performCrawling() {
-        displayRecentSearches(cityInputCount);
-        System.out.println("\nEnter 0 to go back");
-        String cityName;
-        do {
-            System.out.println("Enter any city name in Ontario:");
-            cityName = scanner.nextLine();
-            if (Objects.equals(cityName, "0")) return;
+        outerLoop:
+        while (true) {
+            String crawlingChoice;
+            do {
+                System.out.println("Do you want to perform crawling? (y/n):");
+                crawlingChoice = scanner.nextLine();
+                if (isYNChoiceValid(crawlingChoice)) break;
+                System.out.println("Invalid choice!");
+            } while (true);
 
-        } while (!isCityNameValid(cityName.toLowerCase()));
+            if (crawlingChoice.equals("y") || crawlingChoice.equals("Y")) {
+                displayRecentSearches(cityInputCount);
+                String cityName;
+                do {
+                    System.out.println("Enter any city name in Ontario:");
+                    cityName = scanner.nextLine();
+                    if (Objects.equals(cityName, "0")) return;
+
+                } while (!isCityNameValid(cityName.toLowerCase()));
 
 
-        int freq = cityInputCount.getOrDefault(cityName.toLowerCase(), 0);
-        cityInputCount.put(cityName.toLowerCase(), freq + 1);
+                int freq = cityInputCount.getOrDefault(cityName.toLowerCase(), 0);
+                cityInputCount.put(cityName.toLowerCase(), freq + 1);
 
-        scrapeAll(cityName.substring(0, 1)
-                          .toUpperCase() + cityName.substring(1)); // To perform web crawl from 3 websites
+                scrapeAll(cityName.substring(0, 1)
+                                  .toUpperCase() + cityName.substring(1)); // To perform web crawl from 3 websites
+            }
+
+            if (htmlFilesAvailable()) {
+                if (crawlingChoice.equals("y") || crawlingChoice.equals("Y")) performParsing();
+                else {
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    try {
+
+                        // Read JSON file and convert to array of Java objects
+                        Gym[] file_gyms = objectMapper.readValue(new File(StringConstants.FILTERED_DEALS_OUTPUT_FOLDER_PATH + StringConstants.FILTERED_DEALS_FILE_NAME + ".json"),
+                                                                 Gym[].class);
+                        gymList.addAll(Arrays.stream(file_gyms).toList());
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+
+                    InvertedIndexing.getInstance().buildInvertedIndex(gymList);
+                }
+                innerLoop:
+                while (true) {
+                    System.out.println("Select an option:");
+                    System.out.println("1. Show All");
+                    System.out.println("2. Filter by brand");
+                    System.out.println("3. Filter by Amenity");
+                    System.out.println("9. Go Back");
+                    System.out.println("0. Exit");
+                    int innerChoice = isChoiceValid(scanner.nextLine());
+                    switch (innerChoice) {
+                        case 1 -> printList(gymList, true);
+                        case 2 -> {
+                            boolean flag = true;
+                            String brand = "";
+                            while (true) {
+                                System.out.println("0: Go Back");
+                                System.out.println("Chose a brand:");
+                                System.out.println("1. Fit4Less");
+                                System.out.println("2. GoodLifeFitness");
+                                System.out.println("3. PlanetFitness");
+                                int brandChoice = isChoiceValid(scanner.nextLine());
+                                if (brandChoice == 0) {
+                                    flag = false;
+                                    break;
+                                }
+                                brand = switch (brandChoice) {
+                                    case 1 -> "fitless";
+                                    case 2 -> "goodlife";
+                                    case 3 -> "planetfitness";
+                                    default -> "";
+                                };
+                                if (!brand.isBlank()) break;
+                                System.out.println("Invalid choice!");
+                            }
+                            if (flag) {
+                                Set<Integer> filteredIndex = InvertedIndexing.getInstance()
+                                                                             .getIndexMap()
+                                                                             .getOrDefault(brand, new HashSet<>());
+                                List<Gym> filteredGymList = new ArrayList<>();
+                                filteredIndex.forEach(idx -> filteredGymList.add(gymList.get(idx)));
+                                printList(filteredGymList, false);
+                            }
+                        }
+
+                        case 3 -> {
+                            boolean flag = true;
+                            String brand = "";
+                            while (true) {
+                                System.out.println("0: Go Back");
+                                System.out.println("Chose a brand:");
+                                System.out.println("1. Parking");
+                                System.out.println("2. Wifi");
+                                System.out.println("3. Co-Ed");
+                                System.out.println("4. Massage");
+                                System.out.println("5. Locker");
+                                System.out.println("6. Showers");
+                                System.out.println("7. Sauna");
+                                int brandChoice = isChoiceValid(scanner.nextLine());
+                                if (brandChoice == 0) {
+                                    flag = false;
+                                    break;
+                                }
+                                brand = switch (brandChoice) {
+                                    case 1 -> "parking";
+                                    case 2 -> "wifi";
+                                    case 3 -> "coed";
+                                    case 4 -> "massage";
+                                    case 5 -> "locker";
+                                    case 6 -> "showers";
+                                    case 7 -> "sauna";
+                                    default -> "";
+                                };
+                                if (!brand.isBlank()) break;
+                                System.out.println("Invalid choice!");
+                            }
+                            if (flag) {
+
+                                Set<Integer> filteredIndex = InvertedIndexing.getInstance()
+                                                                             .getIndexMap()
+                                                                             .getOrDefault(brand, new HashSet<>());
+                                List<Gym> filteredGymList = new ArrayList<>();
+                                filteredIndex.forEach(idx -> filteredGymList.add(gymList.get(idx)));
+                                printList(filteredGymList, true);
+                            }
+                        }
+                        case 9 -> {
+                            break innerLoop;
+                        }
+
+                        case 0 -> {
+                            break outerLoop;
+                        }
+                        default -> System.out.println("Invalid choice. Please select again.");
+                    }
+                }
+            } else {
+                performCrawling();
+            }
+        }
     }
 
     // Perform web crawling from both websites

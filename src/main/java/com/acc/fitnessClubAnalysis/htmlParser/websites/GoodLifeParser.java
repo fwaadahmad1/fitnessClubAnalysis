@@ -76,9 +76,17 @@ public class GoodLifeParser implements IHtmlParser {
                 } catch (Exception ignored) {
                 }
 
-                Gym g1 = new Gym(clubName, address, phone, "Premium", provider, "35.99 per 2 weeks", 35.99 / 2);
-                Gym g2 = new Gym(clubName, address, phone, "Ultimate", provider, "39.99 per 2 weeks", 39.99 / 2);
-                Gym g3 = new Gym(clubName, address, phone, "Performance", provider, "54.99 per 2 weeks", 54.99 / 2);
+                String url;
+                try {
+                    Element urlElement = clubDiv.selectFirst("a.c-card__title-link");
+                    url = urlElement.attributes().get("href");
+                } catch (Exception e) {
+                    url = "";
+                }
+
+                Gym g1 = new Gym(clubName, url, address, phone, "Premium", provider, "35.99 per 2 weeks", 35.99 / 2, new ArrayList<>());
+                Gym g2 = new Gym(clubName, url, address, phone, "Ultimate", provider, "39.99 per 2 weeks", 39.99 / 2, new ArrayList<>());
+                Gym g3 = new Gym(clubName, url, address, phone, "Performance", provider, "54.99 per 2 weeks", 54.99 / 2, new ArrayList<>());
                 Info_List.add(g1);
                 Info_List.add(g2);
                 Info_List.add(g3);
@@ -88,5 +96,7 @@ public class GoodLifeParser implements IHtmlParser {
         }
         return Info_List;
     }
+
+
 
 }

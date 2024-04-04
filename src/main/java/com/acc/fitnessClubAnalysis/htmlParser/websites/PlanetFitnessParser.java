@@ -70,8 +70,32 @@ public class PlanetFitnessParser implements IHtmlParser {
                 }
                 // System.out.println("Address: " + address);
 
-                Gym g1 = new Gym(location, address, "", "pf black card", provider, "29.99 per month", 29.99 / 4);
-                Gym g2 = new Gym(location, address, "", "classic", provider, "15 per month", 15.0 / 4);
+                String url;
+                try {
+                    Element urlElement = div.selectFirst("a.text-base.font-semibold.text-primary-main.underline");
+                    url = urlElement.attributes().get("href");
+                } catch (Exception e) {
+                    url = "";
+                }
+
+                Gym g1 = new Gym(location,
+                                 url,
+                                 address,
+                                 "",
+                                 "pf black card",
+                                 provider,
+                                 "29.99 per month",
+                                 29.99 / 4,
+                                 new ArrayList<>());
+                Gym g2 = new Gym(location,
+                                 url,
+                                 address,
+                                 "",
+                                 "classic",
+                                 provider,
+                                 "15 per month",
+                                 15.0 / 4,
+                                 new ArrayList<>());
 
                 Info_List.add(g1);
                 Info_List.add(g2);

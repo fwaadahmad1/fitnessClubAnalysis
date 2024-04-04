@@ -76,8 +76,33 @@ public class Fit4lessParser implements IHtmlParser {
                     }
                 }
 
-                Gym g1 = new Gym(gymName, address, phone, "black card", provider, "13.99 per 2 weeks", 13.99 / 2);
-                Gym g2 = new Gym(gymName, address, phone, "4less card", provider, "7.99 per 2 weeks", 7.99 / 2);
+                Element viewClub = gymDiv.selectFirst("div.clearfix > a[class=\"btn outlined\"]");
+
+                String url;
+                try {
+                    url = viewClub.attributes().get("href");
+                } catch (Exception e) {
+                    url = "";
+                }
+
+                Gym g1 = new Gym(gymName,
+                                 url,
+                                 address,
+                                 phone,
+                                 "black card",
+                                 provider,
+                                 "13.99 per 2 weeks",
+                                 13.99 / 2,
+                                 new ArrayList<>());
+                Gym g2 = new Gym(gymName,
+                                 url,
+                                 address,
+                                 phone,
+                                 "4less card",
+                                 provider,
+                                 "7.99 per 2 weeks",
+                                 7.99 / 2,
+                                 new ArrayList<>());
 
                 Info_List.add(g1);
                 Info_List.add(g2);
@@ -88,6 +113,11 @@ public class Fit4lessParser implements IHtmlParser {
             System.out.println(e.getMessage());
         }
         return Info_List;
+    }
+
+    public static void main(String[] args) {
+        Fit4lessParser fit4lessParser = new Fit4lessParser();
+        fit4lessParser.parseFiles();
     }
 
 }

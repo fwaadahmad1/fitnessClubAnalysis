@@ -13,7 +13,7 @@ public class WordCount {
 
     private static Map<String, Integer> getWrdFrq(String _s) {
         Map<String, Integer> wc_map = new HashMap<>();
-        StringTokenizer _t = new StringTokenizer(_s, " \t\n\r\f,.!?");
+        StringTokenizer _t = new StringTokenizer(_s, " \t\n,.!?");
         if (_t.hasMoreTokens()) {
             do {
                 String _w = _t.nextToken().toLowerCase().replaceAll("[^a-zA-Z]", "");
@@ -30,6 +30,7 @@ public class WordCount {
     }
 
     public static Map<String, Integer> countInText(String text) {
+        if (text.isBlank()) return new HashMap<>();
         return getWrdFrq(text);
     }
 }

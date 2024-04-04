@@ -38,6 +38,8 @@ public class InvertedIndexing {
                 indexMap.put(entry.getKey(), wordSet);
             }
         }
+
+//        indexMap.forEach(((s, integers) -> System.out.println(s + " : [" + String.join(", ", integers.stream().map(String::valueOf).toList()) + "]")));
     }
 }
 
