@@ -5,7 +5,10 @@
  */
 package com.acc.fitnessClubAnalysis.wordCompletion;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class WordCompletion {
 
@@ -80,81 +83,6 @@ public class WordCompletion {
             prefix.append(ch);
             findCompletions(node.children.get(ch), prefix, completions);
             prefix.deleteCharAt(prefix.length() - 1);
-        }
-    }
-
-    // Collect all words stored in the trie
-    public List<String> collectWords() {
-        List<String> words = new ArrayList<>();
-        collectWordsFromNode(root, new StringBuilder(), words);
-        return words;
-    }
-
-    // Helper method for collecting words recursively
-    private void collectWordsFromNode(TrieNode node, StringBuilder prefix, List<String> words) {
-        if (node.isEndOfWord) {
-            words.add(prefix.toString());
-        }
-        for (char ch : node.children.keySet()) {
-            prefix.append(ch);
-            collectWordsFromNode(node.children.get(ch), prefix, words);
-            prefix.deleteCharAt(prefix.length() - 1);
-        }
-    }
-
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        WordCompletion trie = new WordCompletion();
-
-        while (true) {
-            System.out.println("\nWord Completion Menu:");
-            System.out.println("1. Add word");
-            System.out.println("2. Word completion");
-            System.out.println("3. Print dictionary");
-            System.out.println("4. Exit");
-            System.out.print("Enter your choice: ");
-
-            int choice = scanner.nextInt();
-            scanner.nextLine();
-
-            switch (choice) {
-                case 1:
-                    System.out.print("Enter a word to add to dictionary: ");
-                    String wordToAdd = scanner.nextLine().toLowerCase();
-                    trie.insert(wordToAdd);
-                    System.out.println("Word added to dictionary.");
-                    break;
-                case 2:
-                    System.out.print("Enter a prefix to find completions: ");
-                    String prefix = scanner.nextLine().toLowerCase();
-                    List<String> completions = trie.wordCompletion(prefix);
-                    if (!completions.isEmpty()) {
-                        System.out.println("Completions for prefix '" + prefix + "':");
-                        for (String completion : completions) {
-                            System.out.println(completion);
-                        }
-                    } else {
-                        System.out.println("No completions found for prefix '" + prefix + "'.");
-                    }
-                    break;
-                case 3:
-                    System.out.println("Printing dictionary:");
-                    List<String> dictionary = trie.collectWords();
-                    if (!dictionary.isEmpty()) {
-                        System.out.println("Words in dictionary:");
-                        for (String word : dictionary) {
-                            System.out.println(word);
-                        }
-                    } else {
-                        System.out.println("Dictionary is empty.");
-                    }
-                    break;
-                case 4:
-                    System.out.println("Exiting...");
-                    System.exit(0);
-                default:
-                    System.out.println("Invalid choice. Please try again.");
-            }
         }
     }
 }

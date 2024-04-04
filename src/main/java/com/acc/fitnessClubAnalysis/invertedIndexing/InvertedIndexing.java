@@ -39,13 +39,5 @@ public class InvertedIndexing {
             }
         }
     }
-
-    // Function to print the inverted index
-    public void printInvertedIndex() {
-        System.out.println("Inverted Index:");
-        for (Map.Entry<String, Set<Integer>> entry : indexMap.entrySet()) {
-            System.out.println(entry.getKey() + ": " + entry.getValue().toString());
-        }
-    }
 }
 

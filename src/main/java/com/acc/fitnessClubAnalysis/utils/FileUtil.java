@@ -8,8 +8,6 @@ package com.acc.fitnessClubAnalysis.utils;
 import com.acc.fitnessClubAnalysis.constants.StringConstants;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 public class FileUtil {
     public static boolean checkHtmlFilesForGoodLife() {
@@ -79,22 +77,5 @@ public class FileUtil {
     // Check if HTML files present in any of the specified folders
     public static boolean checkHtmlFiles() {
         return checkHtmlFilesForGoodLife() || checkHtmlFilesForPlanetFitness() || checkHtmlFilesForFit4Less();
-    }
-
-    public static List<File> getAllHtmlFiles() {
-        List<String> outputFolderPaths = List.of(StringConstants.FIT4LESS_OUTPUT_FOLDER_PATH,
-                                                 StringConstants.GOOD_LIFE_OUTPUT_FOLDER_PATH,
-                                                 StringConstants.PLANET_FITNESS_OUTPUT_FOLDER_PATH);
-
-        List<File> files = new ArrayList<>();
-
-        outputFolderPaths.forEach(folderPath -> {
-            File folder = new File(folderPath);
-            if (folder.isDirectory()) {
-                File[] fileList = folder.listFiles(file -> file.getName().endsWith(".html"));
-                if (fileList != null) files.addAll(List.of(fileList));
-            }
-        });
-        return files;
     }
 }

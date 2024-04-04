@@ -9,9 +9,6 @@ import com.acc.fitnessClubAnalysis.constants.Cities;
 import com.acc.fitnessClubAnalysis.dictionary.WordDictionary;
 import com.acc.fitnessClubAnalysis.wordCompletion.WordCompletion;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.List;
 
 import static com.acc.fitnessClubAnalysis.utils.StringUtil.capitalize;
@@ -31,16 +28,6 @@ public class InputValidation {
     private static void initDictionary() {
         wordCompletion.insertAll(Cities.ONTARIO_CITIES_LIST);
         dictionary.putAll(Cities.ONTARIO_CITIES_LIST);
-//        try (BufferedReader br = new BufferedReader(new FileReader(
-//                "src/main/java/com/acc/fitnessClubAnalysis/dictionary/words.txt"))) {
-//            String line;
-//            while ((line = br.readLine()) != null) {
-//                dictionary.inst(line.trim());
-//            }
-//        } catch (IOException e) {
-//            System.out.println(e.getMessage());
-//        }
-
     }
 
     public static int isChoiceValid(String choice) {
