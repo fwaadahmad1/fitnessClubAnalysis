@@ -6,13 +6,20 @@ public class Gym {
     String membershipName;
     String provider;
     String price;
+    Double effectivePrice;
 
-    public Gym(String name, String address, String membershipName, String provider, String price) {
+    public Gym(String name,
+               String address,
+               String membershipName,
+               String provider,
+               String price,
+               Double effectivePrice) {
         this.name = name;
         this.address = address;
         this.membershipName = membershipName;
         this.provider = provider;
         this.price = price;
+        this.effectivePrice = effectivePrice;
     }
 
     public String getName() {
@@ -53,5 +60,18 @@ public class Gym {
 
     public void setPrice(String price) {
         this.price = price;
+    }
+
+    public Double getEffectivePrice() {
+        return effectivePrice;
+    }
+
+    public void setEffectivePrice(Double effectivePrice) {
+        this.effectivePrice = effectivePrice;
+    }
+
+    @Override
+    public String toString() {
+        return "name = " + name + " , address = " + address + " , membershipName = " + membershipName + " , provider = " + provider + " , price = " + price;
     }
 }

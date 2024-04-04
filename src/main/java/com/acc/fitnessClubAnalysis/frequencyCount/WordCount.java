@@ -52,15 +52,7 @@ public class WordCount {
 
     public static long count(String word, File file) {
         String s;
-//        StringBuilder textBuilder = new StringBuilder();
         try {
-//            BufferedReader reader = new BufferedReader(new FileReader(file));
-//            String se;
-//            while ((se = reader.readLine()) != null) {
-//                textBuilder.append(se).append("\n");
-//            }
-//            s = textBuilder.toString();
-
             Document doc = Jsoup.parse(file, "UTF-8");
 
             String metaContent = extractMetaContent(doc);
@@ -72,16 +64,30 @@ public class WordCount {
         Map<String, Integer> word_Frequency = getWordFrequency(s);
 
         return word_Frequency.get(word);
+    }
 
-//        System.out.println();
-//		Printing the HashMap keys and their values
-//        word_Frequency.entrySet().stream().sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
-//                      .forEach(entry -> System.out.println(entry.getKey() + " : " + entry.getValue()));
+    public static Map<String, Integer> countInFile(File file) {
+        String s;
+        try {
+            Document doc = Jsoup.parse(file, "UTF-8");
 
+            String metaContent = extractMetaContent(doc);
+            s = metaContent + " " + extractText(doc);
+        } catch (IOException e) {
+            System.err.println("Error reading file: " + e.getMessage());
+            return new HashMap<>();
+        }
 
-//      Printing the lexicalRichness of the text.
-//        double lexicalRichness = calculateLexicalRichness(word_Frequency);
-//        System.out.println("\n\nLexical Richness of the text : " + lexicalRichness);
+        return getWordFrequency(s);
+    }
+
+    public static Map<String, Integer> countInText(String text) {
+        return getWordFrequency(text);
+    }
+
+    public static long count(String word, String content) {
+        Map<String, Integer> word_Frequency = getWordFrequency(content);
+        return word_Frequency.get(word);
     }
 }
 

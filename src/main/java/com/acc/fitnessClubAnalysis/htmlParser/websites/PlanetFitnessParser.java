@@ -45,10 +45,6 @@ public class PlanetFitnessParser implements IHtmlParser {
         List<Gym> Info_List = new ArrayList<>();
 
         String provider = "planetfitness gym";
-        // Parse local HTML file
-        if (file_Path.toLowerCase().contains("planet")) {
-            provider = "planet";
-        }
 
         try {
             File inputt = new File(file_Path);
@@ -74,8 +70,8 @@ public class PlanetFitnessParser implements IHtmlParser {
                 }
                 // System.out.println("Address: " + address);
 
-                Gym g1 = new Gym(location, address, "pf black card", provider, "29.99 per month");
-                Gym g2 = new Gym(location, address, "classic", provider, "15 per month");
+                Gym g1 = new Gym(location, address, "pf black card", provider, "29.99 per month", 29.99 / 4);
+                Gym g2 = new Gym(location, address, "classic", provider, "15 per month", 15.0 / 4);
 
                 Info_List.add(g1);
                 Info_List.add(g2);

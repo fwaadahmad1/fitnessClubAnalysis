@@ -31,20 +31,24 @@ public class InputValidation {
     private static void initDictionary() {
         wordCompletion.insertAll(Cities.ONTARIO_CITIES_LIST);
         dictionary.putAll(Cities.ONTARIO_CITIES_LIST);
-        try (BufferedReader br = new BufferedReader(new FileReader(
-                "src/main/java/com/acc/fitnessClubAnalysis/dictionary/words.txt"))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                dictionary.inst(line.trim());
-            }
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
+//        try (BufferedReader br = new BufferedReader(new FileReader(
+//                "src/main/java/com/acc/fitnessClubAnalysis/dictionary/words.txt"))) {
+//            String line;
+//            while ((line = br.readLine()) != null) {
+//                dictionary.inst(line.trim());
+//            }
+//        } catch (IOException e) {
+//            System.out.println(e.getMessage());
+//        }
 
     }
 
     public static int isChoiceValid(String choice) {
-        return choice.trim().matches("^[0-5]$") ? Integer.parseInt(choice.trim()) : -1;
+        return choice.trim().matches("^[0-9]$") ? Integer.parseInt(choice.trim()) : -1;
+    }
+
+    public static boolean isYNChoiceValid(String choice) {
+        return choice.trim().matches("[ynYN]");
     }
 
     public static boolean isSpellingCorrect(String word) {

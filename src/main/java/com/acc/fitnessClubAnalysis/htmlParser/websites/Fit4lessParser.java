@@ -64,8 +64,8 @@ public class Fit4lessParser implements IHtmlParser {
                     address = addressElement.text();
                 }
 
-                Gym g1 = new Gym(gymName, address, "black card", provider, "13.99 per 2 weeks");
-                Gym g2 = new Gym(gymName, address, "4less card", provider, "7.99 per 2 weeks");
+                Gym g1 = new Gym(gymName, address, "black card", provider, "13.99 per 2 weeks", 13.99 / 2);
+                Gym g2 = new Gym(gymName, address, "4less card", provider, "7.99 per 2 weeks", 7.99 / 2);
 
                 Info_List.add(g1);
                 Info_List.add(g2);
