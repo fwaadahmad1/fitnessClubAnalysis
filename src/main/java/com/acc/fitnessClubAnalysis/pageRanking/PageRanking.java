@@ -5,7 +5,7 @@
  */
 package com.acc.fitnessClubAnalysis.pageRanking;
 
-import com.acc.fitnessClubAnalysis.constants.StringConstants;
+import com.acc.fitnessClubAnalysis.models.Gym;
 import com.acc.fitnessClubAnalysis.models.Rank;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -15,65 +15,12 @@ import org.jsoup.select.Elements;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class PageRanking {
 
-    public static void rank() {
-        List<String> folder_Paths = List.of(StringConstants.FIT4LESS_OUTPUT_FOLDER_PATH,
-                                            StringConstants.GOOD_LIFE_OUTPUT_FOLDER_PATH,
-                                            StringConstants.PLANET_FITNESS_OUTPUT_FOLDER_PATH);
-
-        List<String> filePaths = getFilePaths(folder_Paths);
-
-        // Search keywords
-        String[] keywords = {"gym", "gyms", "fitness"};
-
-        // Calculate ranking
-        PriorityQueue<Rank> pageRankings = calculatePageRankings(filePaths, keywords);
-
-        // Display rankings
-        System.out.println();
-        System.out.println("Website : \t\t Rank");
-        while (!pageRankings.isEmpty()) {
-            Rank pageRank = pageRankings.poll();
-            System.out.printf("%s: \t\t %s\n", pageRank.getName(), pageRank.getRanking());
-        }
-        System.out.println();
-    }
-
-    private static List<String> getFilePaths(List<String> folderPaths) {
-        return folderPaths.stream()
-                          .map(File::new)
-                          .map(File::listFiles)
-                          .filter(Objects::nonNull)
-                          .flatMap(Arrays::stream)
-                          .map(File::getAbsolutePath)
-                          .collect(Collectors.toList());
-    }
-
-    public static PriorityQueue<Rank> calculatePageRankings(List<String> filePaths, String[] keywords) {
-        PriorityQueue<Rank> pageRankings = new PriorityQueue<>(Comparator.comparingInt(Rank::getRanking)
-                                                                         .reversed());
-
-        filePaths.forEach(filePath -> {
-            try {
-                File file = new File(filePath);
-                Document doc = Jsoup.parse(file, "UTF-8");
-
-                String metaContent = extractMetaContent(doc);
-                String content = metaContent + " " + extractText(doc);
-
-                int ranking = calculatePageRanking(content, keywords);
-                pageRankings.offer(new Rank(file.getName().replaceAll("Deals.html", ""), ranking));
-            } catch (IOException e) {
-                System.err.println("Error reading file: " + filePath);
-            }
-        });
-
-        return pageRankings;
+    public static void rank(List<Gym> gymList) {
+        displayPageRanking(calculatePageRanking(gymList));
     }
 
     public static String extractMetaContent(Document doc) {
@@ -98,21 +45,27 @@ public class PageRanking {
         return textContent.toString();
     }
 
-    public static int calculatePageRanking(String content, String[] keywords) {
-        int ranking = 0;
-        String lowerContent = content.toLowerCase();
+    public static PriorityQueue<Rank> calculatePageRanking(List<Gym> gymList) {
+        PriorityQueue<Rank> pageRank = new PriorityQueue<>(Comparator.comparingInt(Rank::getRanking).reversed());
+        pageRank.offer(new Rank("Fit4Less",
+                                (int) gymList.stream().filter(o -> o.getProvider().equals("fit4less")).count()));
+        pageRank.offer(new Rank("GoodLife",
+                                (int) gymList.stream()
+                                             .filter(o -> o.getProvider().equals("GoodLife fitness gym"))
+                                             .count()));
+        pageRank.offer(new Rank("Planet Fitness",
+                                (int) gymList.stream()
+                                             .filter(o -> o.getProvider().equals("planetfitness gym"))
+                                             .count()));
+        return pageRank;
+    }
 
-        for (String keyword : keywords) {
-            Pattern pattern = Pattern.compile("\\b" + Pattern.quote(keyword.toLowerCase()) + "\\b");
-            Matcher matcher = pattern.matcher(lowerContent);
-            int keywordOccurrences = 0;
-            while (matcher.find()) {
-                keywordOccurrences++;
-            }
-            ranking += keywordOccurrences;
+    public static void displayPageRanking(PriorityQueue<Rank> pageRanking) {
+        System.out.println("Web Ranking based on number of gyms at location:");
+        while (!pageRanking.isEmpty()) {
+            Rank page = pageRanking.poll();
+            System.out.println(page.getName() + ": " + page.getRanking());
         }
-
-        return ranking;
     }
 }
 

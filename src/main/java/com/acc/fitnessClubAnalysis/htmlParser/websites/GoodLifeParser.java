@@ -69,9 +69,9 @@ public class GoodLifeParser implements IHtmlParser {
 
                 //   System.out.println(address);
 
-                Gym g1 = new Gym(clubName, address, "Premium", provider, "35.99 per 2 weeks");
-                Gym g2 = new Gym(clubName, address, "Ultimate", provider, "39.99 per 2 weeks");
-                Gym g3 = new Gym(clubName, address, "Performance", provider, "54.99 per 2 weeks");
+                Gym g1 = new Gym(clubName, address, "Premium", provider, "35.99 per 2 weeks", 35.99 / 2);
+                Gym g2 = new Gym(clubName, address, "Ultimate", provider, "39.99 per 2 weeks", 39.99 / 2);
+                Gym g3 = new Gym(clubName, address, "Performance", provider, "54.99 per 2 weeks", 54.99 / 2);
                 Info_List.add(g1);
                 Info_List.add(g2);
                 Info_List.add(g3);

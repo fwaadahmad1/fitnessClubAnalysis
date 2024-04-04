@@ -8,7 +8,6 @@ package com.acc.fitnessClubAnalysis;
 import com.acc.fitnessClubAnalysis.crawler.websites.Fit4LessWebCrawler;
 import com.acc.fitnessClubAnalysis.crawler.websites.GoodLifeWebCrawler;
 import com.acc.fitnessClubAnalysis.crawler.websites.PlanetFitnessWebCrawler;
-import com.acc.fitnessClubAnalysis.frequencyCount.WordCount;
 import com.acc.fitnessClubAnalysis.htmlParser.HtmlParser;
 import com.acc.fitnessClubAnalysis.htmlParser.helpers.HtmlParserHelper;
 import com.acc.fitnessClubAnalysis.invertedIndexing.InvertedIndexing;
@@ -28,20 +27,21 @@ public class FitnessClubAnalysisCLIApplication extends InputValidation {
     private static final HashMap<String, Integer> cityInputCount = new HashMap<>();
     private static final HashMap<String, Integer> wordSearchCount = new HashMap<>();
 
+    private static List<Gym> gymList = new ArrayList<>();
+
     /**
      * Main method to run the program
      */
 
     public static void main(String[] args) {
         init();
+
+        outerLoop:
         while (true) {
             // Display menu options
             System.out.println("Select an option:");
             System.out.println("1. Perform Crawling");
             System.out.println("2. Perform Parsing");
-            System.out.println("3. Rank Pages");
-            System.out.println("4. Create inverted indexing");
-            System.out.println("5. Word Frequency Count");
             System.out.println("0. Exit");
 
             // Read user choice
@@ -50,7 +50,52 @@ public class FitnessClubAnalysisCLIApplication extends InputValidation {
             // Switch based on user choice
             switch (choice) {
                 case 1 -> performCrawling();
-                case 2, 3, 4, 5 -> handleOtherChoices(choice);
+                case 2 -> {
+                    if (htmlFilesAvailable()) {
+                        performParsing();
+                        innerLoop:
+                        while (true) {
+                            System.out.println("Select an option:");
+                            System.out.println("1. Show All");
+                            System.out.println("2. Filter by brand");
+                            System.out.println("0. Go Back");
+                            int innerChoice = isChoiceValid(scanner.nextLine());
+                            switch (innerChoice) {
+                                case 1 -> printList(gymList, true);
+                                case 2 -> {
+                                    String brand;
+                                    while (true) {
+                                        System.out.println("0: Go Back");
+                                        System.out.println("Chose a brand:");
+                                        System.out.println("1. Fit4Less");
+                                        System.out.println("2. GoodLifeFitness");
+                                        System.out.println("3. PlanetFitness");
+                                        int brandChoice = isChoiceValid(scanner.nextLine());
+                                        if (brandChoice == 0) break innerLoop;
+                                        brand = switch (brandChoice) {
+                                            case 1 -> "fitless";
+                                            case 2 -> "goodlife";
+                                            case 3 -> "planetfitness";
+                                            default -> "";
+                                        };
+                                        if (!brand.isBlank()) break;
+                                        System.out.println("Invalid choice!");
+                                    }
+                                    Set<Integer> filteredIndex = InvertedIndexing.getInstance()
+                                                                                 .getIndexMap()
+                                                                                 .getOrDefault(brand, new HashSet<>());
+                                    List<Gym> filteredGymList = new ArrayList<>();
+                                    filteredIndex.forEach(idx -> filteredGymList.add(gymList.get(idx)));
+                                    printList(filteredGymList, false);
+                                }
+                                case 0 -> {
+                                    break innerLoop;
+                                }
+                                default -> System.out.println("Invalid choice. Please select again.");
+                            }
+                        }
+                    }
+                }
                 case 0 -> {
                     System.out.println("Exiting program. Goodbye!");
                     System.exit(0);
@@ -60,26 +105,48 @@ public class FitnessClubAnalysisCLIApplication extends InputValidation {
         }
     }
 
-    private static void handleOtherChoices(int choice) {
-        if (!htmlFilesAvailable()) return;
-        switch (choice) {
-            case 2:
-                performParsing();
-                break;
+    private static void printList(List<Gym> listToPrint, boolean showRank) {
+        System.out.println("Do you want to sort by price: y/n");
 
-            case 3:
-                PageRanking.rank();
-                break;
+        String innerChoice = scanner.nextLine();
 
-            case 4:
-                InvertedIndexing.indexAll();
-                break;
-
-            case 5:
-                countFrequency();
-                break;
-            default:
-                System.out.println("Invalid choice. Please select again.");
+        if (isYNChoiceValid(innerChoice)) {
+            switch (innerChoice) {
+                case "y", "Y" -> {
+                    sortingLoop:
+                    while (true) {
+                        System.out.println("\n0: Go back");
+                        System.out.println("Sorting Type: ");
+                        System.out.println("1: Ascending");
+                        System.out.println("2: Descending ");
+                        int sortingChoice = isChoiceValid(scanner.nextLine());
+                        switch (sortingChoice) {
+                            case 0 -> {
+                                break sortingLoop;
+                            }
+                            case 1 -> {
+                                listToPrint.sort(Comparator.comparingDouble(Gym::getEffectivePrice));
+                                if (showRank) PageRanking.rank(listToPrint);
+                                HtmlParserHelper.displayList(listToPrint);
+                                break sortingLoop;
+                            }
+                            case 2 -> {
+                                listToPrint.sort(Comparator.comparingDouble(Gym::getEffectivePrice).reversed());
+                                if (showRank) PageRanking.rank(listToPrint);
+                                HtmlParserHelper.displayList(listToPrint);
+                                break sortingLoop;
+                            }
+                            default -> System.out.println("Invalid choice!");
+                        }
+                    }
+                }
+                case "n", "N" -> {
+                    if (showRank) PageRanking.rank(listToPrint);
+                    HtmlParserHelper.displayList(listToPrint);
+                }
+            }
+        } else {
+            System.out.println("Invalid Choice!!");
         }
     }
 
@@ -97,25 +164,6 @@ public class FitnessClubAnalysisCLIApplication extends InputValidation {
         }
     }
 
-    private static void countFrequency() {
-        displayRecentSearches(wordSearchCount);
-        System.out.println("\nEnter 0 to go back");
-
-        String word;
-        do {
-            System.out.println("Enter any word to search in files:");
-            word = scanner.nextLine();
-            if (Objects.equals(word, "0")) return;
-
-        } while (!isSpellingCorrect(word));
-
-        int freq = wordSearchCount.getOrDefault(word.toLowerCase(), 0);
-        wordSearchCount.put(word.toLowerCase(), freq + 1);
-
-        WordCount.countAll(word);
-        System.out.println();
-    }
-
     private static boolean htmlFilesAvailable() {
         if (FileUtil.checkHtmlFiles()) return true;
         System.out.println("No Files available.\nPlease perform Crawling first.\n");
@@ -123,8 +171,8 @@ public class FitnessClubAnalysisCLIApplication extends InputValidation {
     }
 
     private static void performParsing() {
-        List<Gym> gymList = HtmlParser.parseAll();
-        HtmlParserHelper.filterDeals(gymList);
+        gymList = HtmlParser.parseAll();
+        InvertedIndexing.getInstance().buildInvertedIndex(gymList);
     }
 
     private static void performCrawling() {
